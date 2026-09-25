@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختيار الرياضة - Fitness Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2196F3;
+            --primary-dark: #1565C0;
+            --success-color: #4CAF50;
+            --danger-color: #F44336;
+            --warning-color: #FF9800;
+            --bg-color: #f5f5f5;
+            --text-color: #333;
+            --text-light: #666;
+            --border-color: #ddd;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin: 0;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        /* Main */
+        .main {
+            margin: 40px 0;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .intro h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        .intro p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+        }
+
+        /* Grid */
+        .images-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .image-card {
+            position: relative;
+            cursor: pointer;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            height: 350px;
+            background: #fff;
+            border: 2px solid transparent;
+        }
+
+        .image-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: filter 0.3s ease;
+        }
+
+        .image-card:hover img {
+            filter: brightness(0.9);
+        }
+
+        .image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            padding: 20px;
+            color: white;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .image-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .image-id {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal[aria-hidden="true"] {
+            display: none;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-content {
+            position: relative;
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: background 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-image-container {
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .modal-body {
+            padding: 30px 25px;
+        }
+
+        .modal-body h3 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+
+        .modal-subtitle {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        /* Form */
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            padding: 12px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Cairo', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        .submit-btn {
+            padding: 14px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.8;
+            cursor: not-allowed;
+        }
+
+        .btn-text {
+            display: inline-block;
+        }
+
+        .btn-loader {
+            font-size: 1.2rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .btn-loader.hidden {
+            display: none;
+        }
+
+        /* Status Message */
+        .status-message {
+            min-height: 24px;
+            text-align: center;
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 8px;
+            display: none;
+        }
+
+        .status-message.show {
+            display: block;
+        }
+
+        .status-message.loading {
+            color: var(--warning-color);
+            background: rgba(255, 152, 0, 0.1);
+        }
+
+        .status-message.success {
+            color: var(--success-color);
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .status-message.error {
+            color: var(--danger-color);
+            background: rgba(244, 67, 54, 0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+            }
+
+            .intro h2 {
+                font-size: 1.5rem;
+            }
+
+            .images-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 15px;
+            }
+
+            .image-card {
+                height: 250px;
+            }
+
+            .modal-content {
+                width: 95%;
+            }
+
+            .modal-body {
+                padding: 20px 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 25px 15px;
+                margin-bottom: 25px;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .intro h2 {
+                font-size: 1.3rem;
+            }
+
+            .images-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .image-card {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">💪 Fitness Hub</h1>
+                <p class="tagline">اختر نشاطك المفضل</p>
+            </div>
+        </header>
+
+        <!-- Main Section -->
+        <main class="main">
+            <section class="intro">
+                <h2>اختر الصورة التي تعجبك</h2>
+                <p>انقر على أي صورة لتختارها، ثم أدخل رقمك</p>
+            </section>
+
+            <!-- Images Grid -->
+            <div class="images-grid" id="imagesGrid"></div>
+        </main>
+    </div>
+
+    <!-- Modal Dialog -->
+    <div class="modal" id="modal" aria-hidden="true">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-content" role="dialog" aria-modal="true">
+            <button class="modal-close" id="closeBtn" aria-label="إغلاق">×</button>
+            
+            <div class="modal-image-container">
+                <img id="modalImage" src="" alt="الصورة المختارة" class="modal-image">
+            </div>
+
+            <div class="modal-body">
+                <h3 id="modalTitle">الصورة المختارة</h3>
+                <p class="modal-subtitle">أدخل رقمك أو معرفك</p>
+
+                <form class="form" id="form" onsubmit="handleSubmit(event)">
+                    <div class="form-group">
+                        <label for="userId">رقم أو معرف:</label>
+                        <input 
+                            type="text" 
+                            id="userId" 
+                            placeholder="مثال: 12345" 
+                            maxlength="50"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span class="btn-text">إرسال</span>
+                        <span class="btn-loader hidden" id="btnLoader">⏳</span>
+                    </button>
+                </form>
+
+                <div class="status-message" id="statusMessage"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Images data with real URLs from Unsplash
+        const images = [
+            {
+                id: 1,
+                title: 'تمرين رياضي',
+                image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80'
+            },
+            {
+                id: 2,
+                title: 'جري سريع',
+                image: 'https://images.unsplash.com/photo-1541534401786-2077eed87a74?w=600&q=80'
+            },
+            {
+                id: 3,
+                title: 'تمرين القوة',
+                image: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=600&q=80'
+            },
+            {
+                id: 4,
+                title: 'يوجا ومرونة',
+                image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&q=80'
+            }
+        ];
+
+        let selectedImage = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderImages();
+            setupModalEvents();
+        });
+
+        // Render images
+        function renderImages() {
+            const grid = document.getElementById('imagesGrid');
+            grid.innerHTML = images.map(img => `
+                <div class="image-card" onclick="selectImage(${img.id})">
+                    <img src="${img.image}" alt="${img.title}" loading="lazy">
+                    <div class="image-overlay">
+                        <div class="image-title">${img.title}</div>
+                        <div class="image-id">الخيار #${img.id}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Select image and open modal
+        function selectImage(id) {
+            selectedImage = images.find(img => img.id === id);
+            if (selectedImage) {
+                document.getElementById('modalImage').src = selectedImage.image;
+                document.getElementById('modalTitle').textContent = selectedImage.title;
+                document.getElementById('modal').setAttribute('aria-hidden', 'false');
+                document.getElementById('userId').value = '';
+                document.getElementById('userId').focus();
+                clearStatus();
+            }
+        }
+
+        // Setup modal events
+        function setupModalEvents() {
+            const modal = document.getElementById('modal');
+            const closeBtn = document.getElementById('closeBtn');
+            const overlay = document.getElementById('modalOverlay');
+
+            closeBtn.addEventListener('click', closeModal);
+            overlay.addEventListener('click', closeModal);
+
+            // Close modal on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') {
+                    closeModal();
+                }
+            });
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('modal').setAttribute('aria-hidden', 'true');
+            selectedImage = null;
+        }
+
+        // Handle form submission
+        function handleSubmit(event) {
+            event.preventDefault();
+
+            const userIdInput = document.getElementById('userId');
+            const userId = userIdInput.value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.querySelector('.btn-text');
+            const btnLoader = document.getElementById('btnLoader');
+
+            // Validate
+            if (!userId) {
+                showStatus('الرجاء إدخال رقمك أو معرفك', 'error');
+                userIdInput.focus();
+                return;
+            }
+
+            if (!selectedImage) {
+                showStatus('الرجاء اختيار صورة أولاً', 'error');
+                return;
+            }
+
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            btnText.classList.add('hidden');
+            btnLoader.classList.remove('hidden');
+
+            // Show loading message
+            showStatus('جاري الإرسال...', 'loading');
+
+            // Simulate API call (replace with real API in production)
+            setTimeout(() => {
+                console.log(`Submitted: Image ID ${selectedImage.id}, User ID: ${userId}`);
+
+                // Show success message
+                showStatus('✓ تم الإرسال بنجاح!', 'success');
+
+                // Re-enable button
+                submitBtn.disabled = false;
+                btnText.classList.remove('hidden');
+                btnLoader.classList.add('hidden');
+
+                // Close modal after 1.5 seconds
+                setTimeout(() => {
+                    closeModal();
+                }, 1500);
+
+            }, 1500); // Simulate 1.5s loading time
+        }
+
+        // Show status message
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = message;
+            statusEl.className = `status-message show ${type}`;
+        }
+
+        // Clear status message
+        function clearStatus() {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = '';
+            statusEl.className = 'status-message';
+        }
+    </script>
+</body>
+</html>
